@@ -1,0 +1,38 @@
+NAME		= so_long
+
+LIBMLX		= libmlx.a
+
+SRC			= so_long.c	map_parsing_and_validation.c print_errors.c \
+			  init_check_images.c window_maker.c moves.c move_validating.c \
+			  ft_strjoin.c ft_strlen.c ft_split.c ft_strcmp.c ft_itoa.c \
+			  ft_strdup.c ft_memcpy.c animation.c key_handler_macos.c
+
+HEADER		= so_long.h
+
+OBJ			= ${SRC:%.c=%.o}
+
+CFLAGS		= -Wall -Wextra -Werror -I ./
+
+.PHONY		: all clean fclean re exe
+
+all			: ${NAME}
+
+${NAME}		: ${OBJ} ${HEADER} ${LIBMLX}
+	gcc ${OBJ} -Lmlx_macos -lmlx_macos -framework OpenGL -framework AppKit -o $(NAME)
+
+%.o : %.c ${HEADER}
+	gcc ${CFLAGS} -c $< -o $@
+
+exe		:
+	./so_long ./bonus.ber
+
+clean		:
+	rm -f ${OBJ} ${OBJ_B} ${OBJ_B}
+	cd ./mlx_macos && make -f Makefile clean
+
+fclean		: clean
+	rm -f ${NAME} ${LIBMLX}
+
+${LIBMLX}	:
+	cd ./mlx_macos && make -f Makefile && mv libmlx.a ./..
+re			: fclean all
